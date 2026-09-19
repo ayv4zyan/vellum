@@ -1,0 +1,14 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Output book directories
+book/
+output/
+dist/
+
+# Ebooks (prevent pushing copyrighted files)
+*.epub
+*.mobi
+*.azw3
+*.pdf

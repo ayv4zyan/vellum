@@ -1,0 +1,497 @@
+/* ==========================================================================
+   The Mom Test - Warm Book Stylesheet
+   Typography: Georgia, serif | 20px body | 1.7 line height
+   Layout: Collapsible Sidebar Table of Contents + Centered Reading Column
+   ========================================================================== */
+
+:root {
+  --bg-color: #f7f1e3;
+  --sidebar-bg: #efe7d3;
+  --card-bg: #fffcf4;
+  --text-color: #242424;
+  --text-muted: #6b6357;
+  --accent: #9d3f11;
+  --accent-hover: #7b2f0a;
+  --accent-bg: rgba(157, 63, 17, 0.08);
+  --border: #dfd4be;
+  --border-subtle: #eae0cd;
+  --callout-bg: #faeed4;
+  --callout-border: #d48b20;
+  --nav-bg: rgba(247, 241, 227, 0.94);
+  --active-chapter-bg: rgba(157, 63, 17, 0.12);
+  --kbd-bg: #e6dcbe;
+  --shadow: rgba(45, 30, 10, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.no-transitions,
+.no-transitions * {
+  transition: none !important;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: Georgia, serif;
+  font-size: 20px;
+  line-height: 1.7;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* ==========================================================================
+   Overall Layout (Sidebar + Main)
+   ========================================================================== */
+
+.book-layout {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ==========================================================================
+   Sidebar Navigation (Desktop collapsible + Mobile drawer)
+   ========================================================================== */
+
+.book-sidebar {
+  width: 320px;
+  min-width: 320px;
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+}
+
+/* Desktop collapse behavior */
+@media (min-width: 960px) {
+  .book-sidebar {
+    transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                visibility 0.25s ease;
+  }
+
+  html.sidebar-collapsed .book-sidebar {
+    margin-left: -320px;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+.sidebar-header {
+  padding: 1.5rem 1.25rem 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-book-title {
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: bold;
+  line-height: 1.35;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.sidebar-book-title:hover {
+  color: var(--accent);
+}
+
+.sidebar-book-author {
+  font-family: Georgia, serif;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.sidebar-toc {
+  padding: 1rem 1.25rem 2rem 1.25rem;
+  flex: 1;
+}
+
+.sidebar-toc-heading {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: bold;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.sidebar-toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-toc > ul > li {
+  margin: 0.4rem 0;
+}
+
+.sidebar-toc ul ul {
+  padding-left: 1rem;
+  margin-top: 0.25rem;
+  border-left: 1px solid var(--border);
+}
+
+.sidebar-toc ul ul li {
+  margin: 0.2rem 0;
+}
+
+.sidebar-toc a {
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--text-color);
+  text-decoration: none;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sidebar-toc a:hover {
+  color: var(--accent);
+  background-color: var(--accent-bg);
+}
+
+.sidebar-toc a.active-chapter {
+  color: var(--accent);
+  background-color: var(--active-chapter-bg);
+  font-weight: bold;
+}
+
+/* ==========================================================================
+   Main Content Area
+   ========================================================================== */
+
+.book-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   Top Utility Bar
+   ========================================================================== */
+
+.book-top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--nav-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.6rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: Georgia, serif;
+  font-size: 0.9rem;
+}
+
+.top-bar-left,
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sidebar-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-color);
+  font-family: Georgia, serif;
+  font-size: 0.88rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px var(--shadow);
+  transition: all 0.15s ease;
+}
+
+.sidebar-toggle-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.toggle-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.book-top-bar a {
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.book-top-bar a:hover {
+  color: var(--accent);
+  background-color: var(--accent-bg);
+}
+
+/* ==========================================================================
+   Reading Content
+   ========================================================================== */
+
+.reading-container {
+  max-width: 760px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 24px 80px 24px;
+}
+
+p {
+  text-align: justify;
+  margin: 1.25rem 0;
+}
+
+h1, h2, h3 {
+  font-family: Georgia, serif;
+  color: var(--text-color);
+}
+
+h1 {
+  font-size: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--accent);
+}
+
+h3 {
+  font-size: 1.25rem;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.75rem auto;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   Index Hero Page
+   ========================================================================== */
+
+.index-hero {
+  text-align: center;
+  padding: 4rem 1rem 3rem 1rem;
+}
+
+.hero-title {
+  font-size: 2.4rem;
+  line-height: 1.25;
+  margin-bottom: 1rem;
+}
+
+.hero-author {
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+}
+
+.start-reading-btn {
+  display: inline-block;
+  background-color: var(--accent);
+  color: #ffffff !important;
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+  padding: 0.85rem 2rem;
+  border-radius: 8px;
+  text-decoration: none !important;
+  box-shadow: 0 4px 12px var(--shadow);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.start-reading-btn:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   Callout & Dialogue
+   ========================================================================== */
+
+.rule-of-thumb {
+  background-color: var(--callout-bg);
+  border-left: 4px solid var(--callout-border);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  margin: 1.75rem 0;
+}
+
+.rule-of-thumb p {
+  margin: 0;
+}
+
+.rule-of-thumb em {
+  font-weight: bold;
+  font-style: normal;
+  color: var(--accent);
+}
+
+.dialogue {
+  border-left: 2px solid var(--border);
+  padding-left: 1rem;
+  margin: 0.4rem 0;
+}
+
+.dialogue p {
+  margin: 0;
+}
+
+.dialogue .speaker,
+span.s1, span.s2, span.s3 {
+  font-weight: bold;
+  color: var(--accent);
+  margin-right: 0.25rem;
+}
+
+.dialogue em {
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Bottom Navigation
+   ========================================================================== */
+
+.bottom-chapter-nav {
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.bottom-nav-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.nav-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0.85rem 1.1rem;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-color);
+  font-family: Georgia, serif;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.nav-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px var(--shadow);
+  text-decoration: none;
+}
+
+.nav-card.prev-card {
+  text-align: left;
+}
+
+.nav-card.next-card {
+  text-align: right;
+}
+
+.card-direction {
+  font-size: 0.78rem;
+  color: var(--accent);
+  margin-bottom: 0.25rem;
+}
+
+.card-title {
+  font-size: 0.95rem;
+  font-weight: bold;
+
+
+/* ==========================================================================
+   Mobile & Tablet Drawer (< 960px)
+   ========================================================================== */
+
+@media (max-width: 959px) {
+  .book-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    margin-left: 0 !important;
+    visibility: visible !important;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.25);
+  }
+
+  .book-sidebar.drawer-animating,
+  .book-sidebar.open {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .book-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+  }
+
+  .sidebar-backdrop.open {
+    display: block;
+  }
+
+  .reading-container {
+    padding: 30px 16px 60px 16px;
+  }
+
+  .bottom-nav-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-card.next-card {
+    text-align: left;
+  }
+}

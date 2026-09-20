@@ -15,7 +15,8 @@ Powered by [Pandoc](https://pandoc.org/) and custom Lua filters.
   - Strips broken inline styles and phantom EPUB slice IDs from headings.
   - Formats callouts (*Rule of thumb: ...*) and dialogues cleanly.
 - **Media & Image Extraction**: Automatically extracts images and figures into the output directory and formats them responsively.
-- **Keyboard Navigation**: Jump between chapters using the `←` and `→` arrow keys.
+- **Section Pages**: Pandoc splits at both chapter (`h1`) and section (`h2`) headings, so TOC entries like “The Mom Test” under Chapter One are their own pages. Heading-only chapter cards (no body) are skipped: TOC and Prev/Next go to the first real section. Each section page repeats the chapter name as a small kicker.
+- **Keyboard Navigation**: Jump between pages using the `←` and `→` arrow keys.
 - **Zero Dependencies**: Generated output is standard HTML and CSS—no web server, build toolchains, or JavaScript frameworks required. Works directly with `file://` in any browser.
 
 ---

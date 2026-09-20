@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover" />
 $for(author-meta)$
   <meta name="author" content="$author-meta$" />
 $endfor$
@@ -19,10 +19,11 @@ $endif$
   <title>$if(title-prefix)$$title-prefix$ – $endif$$pagetitle$</title>
   <script>
     (function() {
-      // Apply desktop sidebar collapsed state immediately to avoid jump
-      if (localStorage.getItem('momtest-sidebar-collapsed') === 'true') {
-        document.documentElement.classList.add('sidebar-collapsed');
-      }
+      try {
+        if (localStorage.getItem('vellum-sidebar-collapsed') === 'true') {
+          document.documentElement.classList.add('sidebar-collapsed');
+        }
+      } catch (e) {}
     })();
   </script>
 $for(css)$
@@ -71,10 +72,10 @@ $endfor$
 
       <div class="top-bar-right">
         $if(previous.url)$
-        <a class="nav-arrow-link prev" href="$previous.url$" accesskey="p" rel="previous" title="Previous chapter">&larr; Prev</a>
+        <a class="nav-arrow-link prev" href="$previous.url$" accesskey="p" rel="previous" title="Previous">&larr; Prev</a>
         $endif$
         $if(next.url)$
-        <a class="nav-arrow-link next" href="$next.url$" accesskey="n" rel="next" title="Next chapter">Next &rarr;</a>
+        <a class="nav-arrow-link next" href="$next.url$" accesskey="n" rel="next" title="Next">Next &rarr;</a>
         $endif$
       </div>
     </header>
@@ -128,76 +129,6 @@ $for(include-after)$
 $include-after$
 $endfor$
 
-<script>
-(function() {
-  // Arrow key navigation
-  document.addEventListener('keydown', function(e) {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.isContentEditable) return;
-    if (e.key === 'ArrowLeft') {
-      const prev = document.querySelector('a[rel="previous"]');
-      if (prev && prev.href) window.location.href = prev.href;
-    } else if (e.key === 'ArrowRight') {
-      const next = document.querySelector('a[rel="next"]');
-      if (next && next.href) window.location.href = next.href;
-    }
-  });
-
-  // Highlight active chapter in sidebar TOC
-  const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-  const tocLinks = document.querySelectorAll('#sidebar-toc a');
-  tocLinks.forEach(link => {
-    const href = link.getAttribute('href').split('#')[0];
-    if (href === currentPath) {
-      link.classList.add('active-chapter');
-      link.scrollIntoView({ block: 'nearest' });
-    }
-  });
-
-  // Preserve sidebar scroll position
-  const sidebar = document.getElementById('sidebar-toc');
-  if (sidebar) {
-    const savedScroll = sessionStorage.getItem('momtest-sidebar-scroll');
-    if (savedScroll) sidebar.scrollTop = parseInt(savedScroll, 10);
-    sidebar.addEventListener('scroll', () => {
-      sessionStorage.setItem('momtest-sidebar-scroll', sidebar.scrollTop);
-    });
-  }
-
-  // Disable transitions during window resize to prevent ghost animations
-  let resizeTimeout;
-  window.addEventListener('resize', () => {
-    document.documentElement.classList.add('no-transitions');
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      document.documentElement.classList.remove('no-transitions');
-    }, 100);
-  });
-
-  // Sidebar toggle (desktop collapse + mobile drawer)
-  const toggleBtn = document.getElementById('sidebar-toggle');
-  const sidebarEl = document.getElementById('sidebar');
-  const backdrop = document.getElementById('sidebar-backdrop');
-
-  function toggleSidebar() {
-    if (window.innerWidth >= 960) {
-      const isCollapsed = document.documentElement.classList.toggle('sidebar-collapsed');
-      localStorage.setItem('momtest-sidebar-collapsed', isCollapsed ? 'true' : 'false');
-    } else {
-      sidebarEl.classList.add('drawer-animating');
-      sidebarEl.classList.toggle('open');
-      backdrop.classList.toggle('open');
-    }
-  }
-
-  if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
-  if (backdrop) {
-    backdrop.addEventListener('click', () => {
-      sidebarEl.classList.add('drawer-animating');
-      sidebarEl.classList.remove('open');
-      backdrop.classList.remove('open');
-    });
-  }
-})();
-</script>
+<script src="reader.js"></script>
 </body>
 </html>

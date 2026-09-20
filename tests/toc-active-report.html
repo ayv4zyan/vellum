@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../book.css" />
+  <style>
+    #report {
+      position: fixed;
+      z-index: 10000;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      background: #111;
+      color: #0f0;
+      font: 16px/1.35 ui-monospace, monospace;
+      padding: 12px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+<div class="book-layout">
+  <aside class="book-sidebar" id="sidebar">
+    <nav class="sidebar-toc" id="sidebar-toc">
+      <ul>
+        <li><a href="intro.html#intro" id="toc-intro">Intro</a></li>
+        <li><a href="1-chapter-one.html#chapter-one" id="toc-chapter-one">CHAPTER ONE</a>
+          <ul>
+            <li><a href="1-chapter-one.html#the-mom-test" id="toc-the-mom-test">The Mom Test</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+  <div class="book-main">
+    <main class="reading-container">
+      <h1 id="chapter-one">CHAPTER ONE</h1>
+      <p>Lead paragraph.</p>
+      <h2 id="the-mom-test">The Mom Test</h2>
+      <p>Section body.</p>
+    </main>
+  </div>
+</div>
+<pre id="report">measuring…</pre>
+<script>
+  history.replaceState(null, "", "/the-mom-test/1-chapter-one");
+</script>
+<script src="../reader.js"></script>
+<script>
+  const chapter = document.getElementById("toc-chapter-one");
+  const intro = document.getElementById("toc-intro");
+  const ok =
+    chapter.classList.contains("active-chapter") &&
+    chapter.getAttribute("aria-current") === "location" &&
+    !intro.classList.contains("active-chapter");
+  document.getElementById("report").textContent =
+    (ok ? "PASS" : "FAIL") +
+    "\npathname=" + location.pathname +
+    "\nchapterActive=" + chapter.classList.contains("active-chapter") +
+    "\nintroActive=" + intro.classList.contains("active-chapter");
+  document.title = ok ? "PASS" : "FAIL";
+</script>
+</body>
+</html>

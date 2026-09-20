@@ -23,12 +23,13 @@ pandoc "$INPUT" \
   --template=template.html \
   --lua-filter=clean.lua \
   -t chunkedhtml \
-  --split-level=1 \
+  --split-level=2 \
   --extract-media="$OUTPUT" \
   --css=book.css \
   --toc \
   -o "$OUTPUT"
 
-cp book.css "$OUTPUT/"
+cp book.css reader.js "$OUTPUT/"
+python3 skip_empty_pages.py "$OUTPUT"
 
 echo "==> Build complete! Open $OUTPUT/index.html to read."

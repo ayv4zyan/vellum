@@ -1,8 +1,30 @@
 -- Pandoc Lua Filter to clean up Cocoa HTML Writer artifacts and enhance structure
 
+-- EPUB books in this pipeline often use h2 for chapters and h3 for
+-- sections (Markdown uses h1/h2). Remember the nearest parent heading
+-- so each section page can show which chapter it belongs to.
+local title_at_level = {}
+
 function Header(el)
   if el.attributes then
     el.attributes.style = nil
+  end
+  title_at_level[el.level] = pandoc.utils.stringify(el)
+  for level = el.level + 1, 6 do
+    title_at_level[level] = nil
+  end
+  local parent_title = title_at_level[el.level - 1]
+  if parent_title and parent_title ~= "" then
+    -- After the heading, not before: chunkedhtml splits at the Header, so
+    -- blocks above it would land on the previous page. The kicker is a
+    -- Div, so it is not in the TOC and does not create chunks.
+    return {
+      el,
+      pandoc.Div(
+        { pandoc.Plain({ pandoc.Str(parent_title) }) },
+        pandoc.Attr("", { "chapter-kicker" }, {})
+      )
+    }
   end
   return el
 end

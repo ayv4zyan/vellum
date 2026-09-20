@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../book.css" />
+  <style>
+    #report {
+      position: fixed;
+      z-index: 10000;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      background: #111;
+      color: #0f0;
+      font: 16px/1.35 ui-monospace, monospace;
+      padding: 12px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+<div class="book-layout">
+  <aside class="book-sidebar" id="sidebar">
+    <div class="sidebar-header">Sidebar</div>
+    <nav class="sidebar-toc" id="sidebar-toc"><ul><li><a href="#">Chapter</a></li></ul></nav>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+  <div class="book-main">
+    <header class="book-top-bar">
+      <button type="button" class="sidebar-toggle-btn" id="sidebar-toggle">Contents</button>
+    </header>
+    <main class="reading-container">
+      <p>Reading column. The sidebar must be a drawer on a 390px viewport, not a 320px sticky column.</p>
+      <span class="card-title">Next chapter</span>
+    </main>
+  </div>
+</div>
+<pre id="report">measuring…</pre>
+<script>
+  const sidebar = document.getElementById("sidebar");
+  const styles = getComputedStyle(sidebar);
+  const report = {
+    viewport: window.innerWidth + "x" + window.innerHeight,
+    position: styles.position,
+    transform: styles.transform,
+    width: styles.width,
+    minWidth: styles.minWidth,
+    height: styles.height,
+  };
+  const ok =
+    window.innerWidth < 960 &&
+    styles.position === "fixed" &&
+    styles.transform !== "none";
+  document.getElementById("report").textContent =
+    (ok ? "PASS" : "FAIL") + "\n" + JSON.stringify(report, null, 2);
+  document.title = ok ? "PASS" : "FAIL";
+</script>
+</body>
+</html>

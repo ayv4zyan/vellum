@@ -53,9 +53,9 @@
     checks.push(["twenty pixels up reveals twenty-five pixels", mode === "mobile"
       ? Math.abs(visiblePixels() - 25) < 1
       : !hidden()]);
-    await move(281);
-    checks.push(["one pixel down hides one pixel", mode === "mobile"
-      ? Math.abs(visiblePixels() - 24) < 1
+    await move(290);
+    checks.push(["ten pixels down hides 12.5 pixels", mode === "mobile"
+      ? Math.abs(visiblePixels() - 12.5) < 1
       : !hidden()]);
     await move(400);
     await move(0);

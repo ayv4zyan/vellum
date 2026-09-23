@@ -50,8 +50,7 @@
       topBarOffset = 0;
     } else {
       const delta = scrollY - lastScrollY;
-      const barMovement = delta < 0 ? delta * 1.25 : delta;
-      topBarOffset = Math.max(0, Math.min(topBar.offsetHeight, topBarOffset + barMovement));
+      topBarOffset = Math.max(0, Math.min(topBar.offsetHeight, topBarOffset + delta * 1.25));
     }
     lastScrollY = scrollY;
     topBar.style.transform = desktopQuery.matches ? "" : `translateY(-${topBarOffset}px)`;

@@ -41,18 +41,19 @@
   const desktopQuery = window.matchMedia("(min-width: 960px)");
   const topBar = document.querySelector(".book-top-bar");
   let lastScrollY = Math.max(0, window.scrollY);
+  let topBarOffset = 0;
 
   function updateTopBar() {
     if (!topBar) return;
     const scrollY = Math.max(0, window.scrollY);
     if (desktopQuery.matches || scrollY <= 48 || document.body.classList.contains("drawer-open")) {
-      topBar.classList.remove("is-hidden");
-    } else if (scrollY > lastScrollY) {
-      topBar.classList.add("is-hidden");
-    } else if (scrollY < lastScrollY) {
-      topBar.classList.remove("is-hidden");
+      topBarOffset = 0;
+    } else {
+      topBarOffset = Math.max(0, Math.min(topBar.offsetHeight, topBarOffset + scrollY - lastScrollY));
     }
     lastScrollY = scrollY;
+    topBar.style.transform = desktopQuery.matches ? "" : `translateY(-${topBarOffset}px)`;
+    topBar.classList.toggle("is-hidden", !desktopQuery.matches && topBarOffset >= topBar.offsetHeight);
   }
   const tocLinks = Array.from(document.querySelectorAll("#sidebar-toc a"));
   const scroller = document.getElementById("sidebar");
@@ -155,7 +156,7 @@
     sidebarEl.classList.toggle("open", open);
     backdrop.classList.toggle("open", open);
     document.body.classList.toggle("drawer-open", open);
-    if (open) topBar?.classList.remove("is-hidden");
+    updateTopBar();
   }
 
   function closeDrawer() {

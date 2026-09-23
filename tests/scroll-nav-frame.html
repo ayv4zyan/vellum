@@ -25,12 +25,12 @@
     const content = document.querySelector("#main-content");
     const checks = [];
     const waitForFrame = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-    const waitForTransition = () => new Promise((resolve) => setTimeout(resolve, 250));
     const move = async (y) => {
       window.scrollTo(0, y);
       await waitForFrame();
     };
     const hidden = () => bar.classList.contains("is-hidden");
+    const visiblePixels = () => Math.max(0, bar.getBoundingClientRect().bottom);
     const contentOffset = () => content.getBoundingClientRect().top + window.scrollY;
 
     await move(30);
@@ -39,17 +39,24 @@
     await move(300);
     checks.push(["scroll down", mode === "mobile" ? hidden() : !hidden()]);
     checks.push(["content position unchanged", Math.abs(contentOffset() - initialOffset) < 1]);
-    await waitForTransition();
     checks.push(["bar position after scroll down", mode === "mobile"
       ? bar.getBoundingClientRect().bottom <= 1
       : bar.getBoundingClientRect().top >= -1]);
-    checks.push(["animated transition", mode === "mobile"
-      ? getComputedStyle(bar).transitionDuration.includes("0.22s")
+    checks.push(["bar follows scroll without transition lag", mode === "mobile"
+      ? getComputedStyle(bar).transitionDuration === "0s"
       : getComputedStyle(bar).transform === "none"]);
     await move(299);
-    checks.push(["slight scroll up", !hidden()]);
-    await waitForTransition();
-    checks.push(["bar position after scroll up", bar.getBoundingClientRect().top >= -1]);
+    checks.push(["one pixel up reveals one pixel", mode === "mobile"
+      ? Math.abs(visiblePixels() - 1) < 2
+      : !hidden()]);
+    await move(280);
+    checks.push(["twenty pixels up reveals twenty pixels", mode === "mobile"
+      ? Math.abs(visiblePixels() - 20) < 2
+      : !hidden()]);
+    await move(281);
+    checks.push(["one pixel down hides one pixel", mode === "mobile"
+      ? Math.abs(visiblePixels() - 19) < 2
+      : !hidden()]);
     await move(400);
     await move(0);
     checks.push(["return to top", !hidden()]);

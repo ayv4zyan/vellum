@@ -72,10 +72,10 @@ $endfor$
 
       <div class="top-bar-right">
         $if(previous.url)$
-        <a class="nav-arrow-link prev" href="$previous.url$" accesskey="p" rel="previous" title="Previous">&larr; Prev</a>
+        <a class="nav-arrow-link prev" href="$previous.url$" accesskey="p" rel="previous" title="Previous"><span class="nav-glyph" aria-hidden="true">&larr;</span><span class="nav-label">Prev</span></a>
         $endif$
         $if(next.url)$
-        <a class="nav-arrow-link next" href="$next.url$" accesskey="n" rel="next" title="Next">Next &rarr;</a>
+        <a class="nav-arrow-link next" href="$next.url$" accesskey="n" rel="next" title="Next"><span class="nav-label">Next</span><span class="nav-glyph" aria-hidden="true">&rarr;</span></a>
         $endif$
       </div>
     </header>
@@ -91,7 +91,7 @@ $if(top)$
         <div class="bottom-nav-grid">
           $if(previous.url)$
           <a class="nav-card prev-card" href="$previous.url$" rel="previous">
-            <span class="card-direction">&larr; Previous</span>
+            <span class="card-direction"><span class="nav-glyph" aria-hidden="true">&larr;</span><span class="nav-label">Previous</span></span>
             <span class="card-title">$previous.title$</span>
           </a>
           $else$
@@ -100,7 +100,7 @@ $if(top)$
 
           $if(next.url)$
           <a class="nav-card next-card" href="$next.url$" rel="next">
-            <span class="card-direction">Next &rarr;</span>
+            <span class="card-direction"><span class="nav-label">Next</span><span class="nav-glyph" aria-hidden="true">&rarr;</span></span>
             <span class="card-title">$next.title$</span>
           </a>
           $else$
@@ -116,7 +116,7 @@ $else$
         $endfor$
         <div class="hero-action">
           $if(next.url)$
-          <a href="$next.url$" class="start-reading-btn">Start Reading &rarr;</a>
+          <a href="$next.url$" class="start-reading-btn"><span class="nav-label">Start Reading</span><span class="nav-glyph" aria-hidden="true">&rarr;</span></a>
           $endif$
         </div>
       </div>

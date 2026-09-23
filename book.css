@@ -248,6 +248,20 @@ body {
   border-radius: 4px;
 }
 
+.nav-arrow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  line-height: 1;
+}
+
+/* U+2190/2192 sit on the math axis, above the visual center of the label. */
+.nav-glyph {
+  display: inline-block;
+  line-height: 1;
+  transform: translateY(0.08em);
+}
+
 .book-top-bar a:hover {
   color: var(--accent);
   background-color: var(--accent-bg);
@@ -368,7 +382,9 @@ img {
 }
 
 .start-reading-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
   background-color: var(--accent);
   color: #ffffff !important;
   font-family: Georgia, serif;
@@ -471,9 +487,17 @@ span.s1, span.s2, span.s3 {
 }
 
 .card-direction {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
   font-size: 0.78rem;
+  line-height: 1;
   color: var(--accent);
   margin-bottom: 0.25rem;
+}
+
+.nav-card.next-card .card-direction {
+  justify-content: flex-end;
 }
 
 .card-title {
@@ -551,5 +575,9 @@ span.s1, span.s2, span.s3 {
 
   .nav-card.next-card {
     text-align: left;
+  }
+
+  .nav-card.next-card .card-direction {
+    justify-content: flex-start;
   }
 }

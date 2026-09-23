@@ -255,11 +255,11 @@ body {
   line-height: 1;
 }
 
-/* U+2190/2192 sit on the math axis, above the visual center of the label. */
+/* Georgia arrows sit on the math axis, well above the label's visual center. */
 .nav-glyph {
   display: inline-block;
   line-height: 1;
-  transform: translateY(0.08em);
+  transform: translateY(0.22em);
 }
 
 .book-top-bar a:hover {

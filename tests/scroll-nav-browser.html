@@ -1,0 +1,19 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Scroll navigation browser check</title>
+<h1>Scroll navigation browser check</h1>
+<p id="report">Running…</p>
+<iframe title="Mobile reader" src="scroll-nav-frame.html?mobile" width="390" height="500"></iframe>
+<iframe title="Desktop reader" src="scroll-nav-frame.html?desktop" width="1100" height="500"></iframe>
+<script>
+  const results = {};
+  window.addEventListener("message", (event) => {
+    if (event.origin !== location.origin || !event.data?.scrollNavResults) return;
+    results[event.data.mode] = event.data.scrollNavResults;
+    if (!results.mobile || !results.desktop) return;
+    const lines = Object.entries(results).flatMap(([mode, checks]) =>
+      checks.map(([name, ok]) => `${ok ? "PASS" : "FAIL"}: ${mode} ${name}`));
+    document.getElementById("report").textContent = lines.join("\n");
+    document.title = lines.every((line) => line.startsWith("PASS")) ? "PASS" : "FAIL";
+  });
+</script>

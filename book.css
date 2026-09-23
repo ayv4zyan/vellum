@@ -515,6 +515,27 @@ span.s1, span.s2, span.s3 {
    ========================================================================== */
 
 @media (max-width: 959px) {
+  .book-top-bar {
+    transition: transform 0.22s ease, visibility 0s;
+  }
+
+  .book-top-bar.is-hidden {
+    transform: translateY(-100%);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.22s ease, visibility 0s 0.22s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .book-top-bar {
+      transition: none;
+    }
+
+    .book-top-bar.is-hidden {
+      transition: none;
+    }
+  }
+
   .book-sidebar {
     position: fixed;
     top: 0;

@@ -39,6 +39,21 @@
   }
 
   const desktopQuery = window.matchMedia("(min-width: 960px)");
+  const topBar = document.querySelector(".book-top-bar");
+  let lastScrollY = Math.max(0, window.scrollY);
+
+  function updateTopBar() {
+    if (!topBar) return;
+    const scrollY = Math.max(0, window.scrollY);
+    if (desktopQuery.matches || scrollY <= 48 || document.body.classList.contains("drawer-open")) {
+      topBar.classList.remove("is-hidden");
+    } else if (scrollY > lastScrollY) {
+      topBar.classList.add("is-hidden");
+    } else if (scrollY < lastScrollY) {
+      topBar.classList.remove("is-hidden");
+    }
+    lastScrollY = scrollY;
+  }
   const tocLinks = Array.from(document.querySelectorAll("#sidebar-toc a"));
   const scroller = document.getElementById("sidebar");
   const pageFile = currentFile();
@@ -122,6 +137,7 @@
 
   let resizeTimeout;
   window.addEventListener("resize", () => {
+    updateTopBar();
     document.documentElement.classList.add("no-transitions");
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
@@ -139,6 +155,7 @@
     sidebarEl.classList.toggle("open", open);
     backdrop.classList.toggle("open", open);
     document.body.classList.toggle("drawer-open", open);
+    if (open) topBar?.classList.remove("is-hidden");
   }
 
   function closeDrawer() {
@@ -165,6 +182,7 @@
       window.__vellumSpyFrame = requestAnimationFrame(() => {
         window.__vellumSpyFrame = null;
         updateActive();
+        updateTopBar();
       });
     },
     { passive: true }
@@ -181,4 +199,5 @@
   });
 
   updateActive();
+  updateTopBar();
 })();

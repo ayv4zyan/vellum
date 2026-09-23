@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../book.css">
+<div class="book-layout">
+  <aside class="book-sidebar" id="sidebar"><nav id="sidebar-toc"></nav></aside>
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+  <div class="book-main">
+    <header class="book-top-bar">
+      <button id="sidebar-toggle">Contents</button>
+      <div class="top-bar-right"><a href="#prev">Prev</a><a href="#next">Next</a></div>
+    </header>
+    <main class="reading-container" id="main-content">
+      <p>Reading content</p>
+      <div style="height: 2400px"></div>
+    </main>
+  </div>
+</div>
+<script src="../reader.js"></script>
+<script>
+  (async () => {
+    const mode = location.search.slice(1);
+    const bar = document.querySelector(".book-top-bar");
+    const content = document.querySelector("#main-content");
+    const checks = [];
+    const waitForFrame = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    const waitForTransition = () => new Promise((resolve) => setTimeout(resolve, 250));
+    const move = async (y) => {
+      window.scrollTo(0, y);
+      await waitForFrame();
+    };
+    const hidden = () => bar.classList.contains("is-hidden");
+    const contentOffset = () => content.getBoundingClientRect().top + window.scrollY;
+
+    await move(30);
+    checks.push(["visible near top", !hidden()]);
+    const initialOffset = contentOffset();
+    await move(300);
+    checks.push(["scroll down", mode === "mobile" ? hidden() : !hidden()]);
+    checks.push(["content position unchanged", Math.abs(contentOffset() - initialOffset) < 1]);
+    await waitForTransition();
+    checks.push(["bar position after scroll down", mode === "mobile"
+      ? bar.getBoundingClientRect().bottom <= 1
+      : bar.getBoundingClientRect().top >= -1]);
+    checks.push(["animated transition", mode === "mobile"
+      ? getComputedStyle(bar).transitionDuration.includes("0.22s")
+      : getComputedStyle(bar).transform === "none"]);
+    await move(299);
+    checks.push(["slight scroll up", !hidden()]);
+    await waitForTransition();
+    checks.push(["bar position after scroll up", bar.getBoundingClientRect().top >= -1]);
+    await move(400);
+    await move(0);
+    checks.push(["return to top", !hidden()]);
+    parent.postMessage({ mode, scrollNavResults: checks }, location.origin);
+  })();
+</script>
+</html>

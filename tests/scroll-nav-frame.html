@@ -17,7 +17,7 @@
     </main>
   </div>
 </div>
-<script src="../reader.js"></script>
+<script src="../reader.js?scroll-speed-check"></script>
 <script>
   (async () => {
     const mode = location.search.slice(1);
@@ -46,16 +46,16 @@
       ? getComputedStyle(bar).transitionDuration === "0s"
       : getComputedStyle(bar).transform === "none"]);
     await move(299);
-    checks.push(["one pixel up reveals one pixel", mode === "mobile"
-      ? Math.abs(visiblePixels() - 1) < 2
+    checks.push(["one pixel up reveals 1.25 pixels", mode === "mobile"
+      ? Math.abs(visiblePixels() - 1.25) < 0.5
       : !hidden()]);
     await move(280);
-    checks.push(["twenty pixels up reveals twenty pixels", mode === "mobile"
-      ? Math.abs(visiblePixels() - 20) < 2
+    checks.push(["twenty pixels up reveals twenty-five pixels", mode === "mobile"
+      ? Math.abs(visiblePixels() - 25) < 1
       : !hidden()]);
     await move(281);
     checks.push(["one pixel down hides one pixel", mode === "mobile"
-      ? Math.abs(visiblePixels() - 19) < 2
+      ? Math.abs(visiblePixels() - 24) < 1
       : !hidden()]);
     await move(400);
     await move(0);

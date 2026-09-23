@@ -49,7 +49,9 @@
     if (desktopQuery.matches || scrollY <= 48 || document.body.classList.contains("drawer-open")) {
       topBarOffset = 0;
     } else {
-      topBarOffset = Math.max(0, Math.min(topBar.offsetHeight, topBarOffset + scrollY - lastScrollY));
+      const delta = scrollY - lastScrollY;
+      const barMovement = delta < 0 ? delta * 1.25 : delta;
+      topBarOffset = Math.max(0, Math.min(topBar.offsetHeight, topBarOffset + barMovement));
     }
     lastScrollY = scrollY;
     topBar.style.transform = desktopQuery.matches ? "" : `translateY(-${topBarOffset}px)`;

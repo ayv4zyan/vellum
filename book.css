@@ -255,11 +255,11 @@ body {
   line-height: 1;
 }
 
-/* Georgia arrows sit on the math axis, well above the label's visual center. */
 .nav-glyph {
-  display: inline-block;
-  line-height: 1;
-  transform: translateY(0.22em);
+  display: block;
+  width: 1em;
+  height: 1em;
+  flex: none;
 }
 
 .book-top-bar a:hover {

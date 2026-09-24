@@ -66,18 +66,13 @@ $endfor$
     <header class="book-top-bar">
       <div class="top-bar-left">
         <button type="button" class="sidebar-toggle-btn" id="sidebar-toggle" aria-label="Toggle navigation" title="Toggle Table of Contents">
-          <span class="toggle-icon">&equiv;</span> Contents
+          <span class="toggle-icon" aria-hidden="true">&equiv;</span><span class="toggle-label">Contents</span>
         </button>
       </div>
 
-      <div class="top-bar-right">
-        $if(previous.url)$
-        <a class="nav-arrow-link prev" href="$previous.url$" accesskey="p" rel="previous" title="Previous"><svg class="nav-glyph" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span class="nav-label">Prev</span></a>
-        $endif$
-        $if(next.url)$
-        <a class="nav-arrow-link next" href="$next.url$" accesskey="n" rel="next" title="Next"><span class="nav-label">Next</span><svg class="nav-glyph" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-        $endif$
-      </div>
+      $if(top)$
+      <div class="top-bar-title">$pagetitle$</div>
+      $endif$
     </header>
 
     <!-- Reading Container -->
@@ -116,7 +111,7 @@ $else$
         $endfor$
         <div class="hero-action">
           $if(next.url)$
-          <a href="$next.url$" class="start-reading-btn"><span class="nav-label">Start Reading</span><svg class="nav-glyph" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          <a href="$next.url$" class="start-reading-btn" rel="next"><span class="nav-label">Start Reading</span><svg class="nav-glyph" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
           $endif$
         </div>
       </div>

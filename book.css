@@ -208,11 +208,20 @@ body {
   font-size: 0.9rem;
 }
 
-.top-bar-left,
-.top-bar-right {
+.top-bar-left {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  flex: none;
+}
+
+.top-bar-title {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sidebar-toggle-btn {
@@ -241,30 +250,11 @@ body {
   line-height: 1;
 }
 
-.book-top-bar a {
-  color: var(--text-muted);
-  text-decoration: none;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-}
-
-.nav-arrow-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35em;
-  line-height: 1;
-}
-
 .nav-glyph {
   display: block;
   width: 1em;
   height: 1em;
   flex: none;
-}
-
-.book-top-bar a:hover {
-  color: var(--accent);
-  background-color: var(--accent-bg);
 }
 
 /* ==========================================================================
@@ -515,6 +505,18 @@ span.s1, span.s2, span.s3 {
    ========================================================================== */
 
 @media (max-width: 959px) {
+  .sidebar-toggle-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    gap: 0;
+    justify-content: center;
+  }
+
+  .toggle-label {
+    display: none;
+  }
+
   .book-top-bar {
     will-change: transform;
   }

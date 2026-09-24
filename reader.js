@@ -40,8 +40,29 @@
 
   const desktopQuery = window.matchMedia("(min-width: 960px)");
   const topBar = document.querySelector(".book-top-bar");
+  const topBarTitle = document.querySelector(".top-bar-title");
+  const article = document.querySelector(".chapter-content");
+  const headings = article ? Array.from(article.querySelectorAll("h1, h2, h3, h4, h5, h6")) : [];
+  const pageHeadingLevel = headings.length ? Number(headings[0].tagName.slice(1)) : 0;
+  const subsectionHeadings = headings.filter((heading) => Number(heading.tagName.slice(1)) === pageHeadingLevel + 1);
+  const pageTitle = topBarTitle ? topBarTitle.textContent.trim() : "";
   let lastScrollY = Math.max(0, window.scrollY);
   let topBarOffset = 0;
+
+  function updateTopBarTitle() {
+    if (!topBarTitle || !subsectionHeadings.length) return;
+    let title = pageTitle;
+    const threshold = topBar.offsetHeight;
+    for (const heading of subsectionHeadings) {
+      if (heading.getBoundingClientRect().bottom > threshold) break;
+      title = heading.textContent.replace(/\s+/g, " ").trim() || title;
+    }
+    if (title === topBarTitle.textContent) return;
+    topBarTitle.textContent = title;
+    topBarTitle.classList.remove("is-changing");
+    void topBarTitle.offsetWidth;
+    topBarTitle.classList.add("is-changing");
+  }
 
   function updateTopBar() {
     if (!topBar) return;
@@ -140,6 +161,7 @@
   let resizeTimeout;
   window.addEventListener("resize", () => {
     updateTopBar();
+    updateTopBarTitle();
     document.documentElement.classList.add("no-transitions");
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
@@ -176,7 +198,10 @@
   if (toggleBtn) toggleBtn.addEventListener("click", toggleSidebar);
   if (backdrop) backdrop.addEventListener("click", closeDrawer);
 
-  window.addEventListener("hashchange", updateActive);
+  window.addEventListener("hashchange", () => {
+    updateActive();
+    updateTopBarTitle();
+  });
   window.addEventListener(
     "scroll",
     () => {
@@ -185,6 +210,7 @@
         window.__vellumSpyFrame = null;
         updateActive();
         updateTopBar();
+        updateTopBarTitle();
       });
     },
     { passive: true }
@@ -202,4 +228,6 @@
 
   updateActive();
   updateTopBar();
+  updateTopBarTitle();
+  window.addEventListener("load", updateTopBarTitle);
 })();

@@ -14,7 +14,7 @@ function Header(el)
     title_at_level[level] = nil
   end
   local parent_title = title_at_level[el.level - 1]
-  if parent_title and parent_title ~= "" then
+  if parent_title and parent_title ~= "" and not el.classes:includes("reader-subheading") then
     -- After the heading, not before: chunkedhtml splits at the Header, so
     -- blocks above it would land on the previous page. The kicker is a
     -- Div, so it is not in the TOC and does not create chunks.

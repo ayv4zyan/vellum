@@ -45,23 +45,17 @@
   const headings = article ? Array.from(article.querySelectorAll("h1, h2, h3, h4, h5, h6")) : [];
   const pageHeadingLevel = headings.length ? Number(headings[0].tagName.slice(1)) : 0;
   const subsectionHeadings = headings.filter((heading) => Number(heading.tagName.slice(1)) === pageHeadingLevel + 1);
-  const subsectionMarkers = subsectionHeadings.length ? subsectionHeadings : Array.from(article ? article.children : []).filter((element) => {
-    if (element.tagName !== "P" || element.children.length !== 1) return false;
-    if (!/^(STRONG|B)$/.test(element.firstElementChild.tagName)) return false;
-    const label = element.textContent.replace(/\s+/g, " ").trim();
-    return label.length > 0 && label.length <= 80 && !label.endsWith(":");
-  });
   const pageTitle = topBarTitle ? topBarTitle.textContent.trim() : "";
   let lastScrollY = Math.max(0, window.scrollY);
   let topBarOffset = 0;
 
   function updateTopBarTitle() {
-    if (!topBarTitle || !subsectionMarkers.length) return;
+    if (!topBarTitle || !subsectionHeadings.length) return;
     let title = pageTitle;
     const threshold = topBar.offsetHeight;
-    for (const marker of subsectionMarkers) {
-      if (marker.getBoundingClientRect().bottom > threshold) break;
-      title = marker.textContent.replace(/\s+/g, " ").trim() || title;
+    for (const heading of subsectionHeadings) {
+      if (heading.getBoundingClientRect().bottom > threshold) break;
+      title = heading.textContent.replace(/\s+/g, " ").trim() || title;
     }
     if (title === topBarTitle.textContent) return;
     topBarTitle.textContent = title;

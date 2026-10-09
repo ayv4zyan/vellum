@@ -257,4 +257,3 @@
   window.addEventListener("load", updateTopBarTitle);
   window.addEventListener("load", updateReadingProgress);
 })();
-

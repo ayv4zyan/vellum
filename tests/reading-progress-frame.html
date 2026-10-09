@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../book.css">
+<div class="book-layout">
+  <aside class="book-sidebar" id="sidebar"><nav id="sidebar-toc"></nav></aside>
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+  <div class="book-main">
+    <header class="book-top-bar"><button id="sidebar-toggle">Contents</button><div class="top-bar-title">Progress fixture</div></header>
+    <main class="reading-container" id="main-content">
+      <article class="chapter-content"><h1>Progress fixture</h1><p>Reading content</p><div style="height:2400px"></div></article>
+    </main>
+  </div>
+</div>
+<script src="../reader.js"></script>
+<script>
+  (async () => {
+    const mode = location.search.slice(1);
+    const checks = [];
+    const frame = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    const move = async y => { window.scrollTo(0, y); await frame(); };
+    const track = document.querySelector('.reading-progress');
+    const fill = document.querySelector('.reading-progress-fill');
+    checks.push(['progress indicator exists', !!track && !!fill]);
+    if (track && fill) {
+      const start = Number(track.getAttribute('aria-valuenow'));
+      const startWidth = fill.getBoundingClientRect().width;
+      checks.push(['visible at viewport top', track.getBoundingClientRect().top === 0 && track.getBoundingClientRect().height === 3 && startWidth > 0]);
+      checks.push(['above navigation', Number(getComputedStyle(track).zIndex) > Number(getComputedStyle(document.querySelector('.book-top-bar')).zIndex)]);
+      checks.push(['does not intercept input', getComputedStyle(track).pointerEvents === 'none']);
+      await move(500);
+      checks.push(['advances with scrolling', Number(track.getAttribute('aria-valuenow')) > start && fill.getBoundingClientRect().width > startWidth]);
+      checks.push(['stays visible while navigation hides', track.getBoundingClientRect().top === 0 && track.getBoundingClientRect().height === 3]);
+      if (mode === 'mobile') {
+        checks.push(['mobile navigation hidden', document.querySelector('.book-top-bar').classList.contains('is-hidden')]);
+        document.querySelector('#sidebar-toggle').click();
+        await frame();
+        checks.push(['drawer above progress', Number(getComputedStyle(document.querySelector('#sidebar')).zIndex) > Number(getComputedStyle(track).zIndex)]);
+        document.querySelector('#sidebar-backdrop').click();
+        await frame();
+      } else {
+        document.querySelector('#sidebar-toggle').click();
+        await frame();
+        checks.push(['progress survives sidebar collapse', track.getBoundingClientRect().top === 0 && fill.getBoundingClientRect().width > 0]);
+      }
+      await move(document.documentElement.scrollHeight);
+      checks.push(['complete at article end', track.getAttribute('aria-valuenow') === '100']);
+      await move(0);
+      checks.push(['returns to initial progress', Number(track.getAttribute('aria-valuenow')) === start]);
+    }
+    parent.postMessage({readingProgressResults:checks, mode}, '*');
+  })();
+</script>
+</html>

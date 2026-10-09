@@ -46,6 +46,28 @@
   const pageHeadingLevel = headings.length ? Number(headings[0].tagName.slice(1)) : 0;
   const subsectionHeadings = headings.filter((heading) => Number(heading.tagName.slice(1)) === pageHeadingLevel + 1);
   const pageTitle = topBarTitle ? topBarTitle.textContent.trim() : "";
+  let progressBar = null;
+  if (article) {
+    const track = document.createElement("div");
+    track.className = "reading-progress";
+    track.setAttribute("role", "progressbar");
+    track.setAttribute("aria-label", "Current page reading progress");
+    track.setAttribute("aria-valuemin", "0");
+    track.setAttribute("aria-valuemax", "100");
+    progressBar = document.createElement("div");
+    progressBar.className = "reading-progress-fill";
+    track.appendChild(progressBar);
+    document.body.appendChild(track);
+  }
+
+  function updateReadingProgress() {
+    if (!article || !progressBar) return;
+    const rect = article.getBoundingClientRect();
+    const visibleBottom = window.innerHeight;
+    const progress = Math.max(0, Math.min(1, (visibleBottom - rect.top) / Math.max(1, rect.height)));
+    progressBar.style.width = `${progress * 100}%`;
+    progressBar.parentElement.setAttribute("aria-valuenow", String(Math.round(progress * 100)));
+  }
   let lastScrollY = Math.max(0, window.scrollY);
   let topBarOffset = 0;
 
@@ -211,6 +233,7 @@
         updateActive();
         updateTopBar();
         updateTopBarTitle();
+        updateReadingProgress();
       });
     },
     { passive: true }
@@ -229,5 +252,8 @@
   updateActive();
   updateTopBar();
   updateTopBarTitle();
+  updateReadingProgress();
+  window.addEventListener("resize", updateReadingProgress);
   window.addEventListener("load", updateTopBarTitle);
+  window.addEventListener("load", updateReadingProgress);
 })();

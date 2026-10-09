@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Reading progress regression</title>
+<style>body {font:16px system-ui} iframe {border:1px solid #aaa} .fail {color:#b00} .pass {color:#070}</style>
+<h1>Reading progress regression</h1>
+<p>Desktop (1280 × 800) and narrow mobile (320 × 640), using the real reader assets.</p>
+<pre id="results">Running…</pre>
+<script>
+  const results = {};
+  window.addEventListener('message', event => {
+    if (!event.data.readingProgressResults) return;
+    results[event.data.mode] = event.data.readingProgressResults;
+    const output = document.querySelector('#results');
+    output.textContent = Object.entries(results).flatMap(([mode, checks]) => checks.map(([name, pass]) => `${pass ? 'PASS' : 'FAIL'} ${mode}: ${name}`)).join('\n');
+    if (Object.keys(results).length === 2) {
+      const pass = Object.values(results).flat().every(([, pass]) => pass);
+      document.title = (pass ? 'PASS' : 'FAIL') + ': Reading progress regression';
+      output.className = pass ? 'pass' : 'fail';
+    }
+  });
+</script>
+<iframe title="Mobile progress" src="reading-progress-frame.html?mobile" width="320" height="640"></iframe>
+<iframe title="Desktop progress" src="reading-progress-frame.html?desktop" width="1280" height="800"></iframe>
+</html>

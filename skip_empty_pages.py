@@ -15,6 +15,7 @@ ARTICLE_RE = re.compile(
 )
 HEADING_RE = re.compile(r"<h[1-6]\b[^>]*>.*?</h[1-6]>", re.S | re.I)
 TAG_RE = re.compile(r"<[^>]+>")
+MEDIA_RE = re.compile(r"<(?:img|svg|video|audio|object|iframe|canvas|table)\b", re.I)
 TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S | re.I)
 ANCHOR_RE = re.compile(r"<a\b[^>]*>", re.I)
 
@@ -28,7 +29,11 @@ def is_heading_only(html: str) -> bool:
     match = ARTICLE_RE.search(html)
     if not match:
         return False
-    leftover = HEADING_RE.sub("", match.group(1))
+    article = match.group(1)
+    # A cover or figure page has no prose, but it is still a page.
+    if MEDIA_RE.search(article):
+        return False
+    leftover = HEADING_RE.sub("", article)
     leftover = TAG_RE.sub("", leftover)
     leftover = unescape(leftover)
     leftover = leftover.replace("\xa0", " ")

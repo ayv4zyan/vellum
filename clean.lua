@@ -66,6 +66,16 @@ function Para(el)
   return el
 end
 
+function Div(el)
+  -- Calibre wraps each spine item in div.booksection. Chunked HTML only
+  -- splits headings that sit outside that wrapper, so a chapter's sections
+  -- would stay on one page. Lift the contents out.
+  if el.classes:includes("booksection") then
+    return el.content
+  end
+  return el
+end
+
 function Span(el)
   if el.attributes then
     el.attributes.style = nil
